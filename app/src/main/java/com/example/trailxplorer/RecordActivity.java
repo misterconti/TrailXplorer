@@ -84,6 +84,7 @@ public class RecordActivity extends AppCompatActivity {
         else
         {
             // The user has not moved, the graph is not shown
+
             speedTxt.setText("No speed to show");
             float[] ok = new float[]{10};
             lineChart.setChartData(ok);

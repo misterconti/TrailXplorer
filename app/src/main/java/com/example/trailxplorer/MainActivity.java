@@ -37,8 +37,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private int MY_PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 1;
     private int MY_PERMISSION_REQUEST_ACCESS_COARSE_LOCATION = 1;
-    private int MY_PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
-    private int MY_PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1;
 
     private int answer;
 
@@ -91,9 +89,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onClick(View v) {
                 if(!running)
                 {
-                    //Start the traveler's journey by starting the chronometer,
-                    //create a new folder called "GPStracks" if it does not exists,
-                    //and create a new .gpx file with the current date and time as title
+                    // Start the traveler's journey by starting the chronometer,
+                    // create a new folder called "GPStracks" if it does not exist,
+                    // and create a new .gpx file with the current date and time as title
                     startChronometer();
                     dir = gpxHelper.newDirectory(directoryName);
                     file = gpxHelper.newFile(dir, fileName);
@@ -101,9 +99,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
                 else
                 {
-                    //Ends the traveler's journey by stopping the chronometer
-                    //write the end of the .gpx file created before
-                    //and gather every necessary detail about the traveler's journey
+                    // Ends the traveler's journey by stopping the chronometer
+                    // write the end of the .gpx file created before
+                    // and gather every necessary detail about the traveler's journey
                     gpxHelper.closeFile(file);
                     totatDistance = getDistanceSpeedThroughTimeMaxAltitude(trackPoints);
                     intoRecordActivity();
@@ -112,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
     }
 
-    //Run the chronometer
+    // Run the chronometer
     public void startChronometer()
     {
         recordText.setText("Recording your journey !");
@@ -122,16 +120,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         running = true;
     }
 
-    /*Upon end of recording, gather every details of the trail
-    And give them to the RecordActivity*/
+    // Upon end of recording, gather every details of the trail
+    // and give them to the RecordActivity
     public void intoRecordActivity()
     {
-        //Stops the chronometer
+        // Stops the chronometer
         recordText.setText("");
         chronometer.stop();
         running = false;
 
-        //Get every details of the journey
+        // Get every details of the journey
         String dst = String.valueOf(totatDistance);
         String chrono = (String) chronometer.getText();
         double elapsedSeconds = (SystemClock.elapsedRealtime() - chronometer.getBase()) * 0.001;
@@ -141,16 +139,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         averageSpeedKH = Math.floor(((totatDistance/elapsedSeconds) * 3.6) * 100) / 100;
         String averageSpd = String.valueOf(averageSpeedKH);
 
-        //Reset the chronometer to 0
+        // Reset the chronometer to 0
         chronometer.setBase(SystemClock.elapsedRealtime());
         pauseOffset = 0;
         recordButton.setText("Start Record");
 
-        //Stops the pedometer
+        // Stops the pedometer
         String steps = (String) stepCounter.getText();
         endPedometer();
 
-        //Start the RecordActivity and send the journey's details to it
+        // Start the RecordActivity and send it the details of the journey
         Intent intent = new Intent(this, RecordActivity.class);
         intent.putExtra("Max Altitude", maxAltitude);
         intent.putExtra("Min Altitude", minAltitude);
@@ -162,10 +160,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         startActivity(intent);
     }
 
-    /*Calculate the distance traveled
-    Compare the trackpoints' altitude and get the maximum altitude
-    Calculate the speed of the traveler between two points and create an array of them
-    This array is used to create the graph of the traveler's speed throughout his journey*/
+    // Calculate the distance traveled
+    // Compare the trackpoints' altitudes and get the maximum and minimum altitudes
+    // Calculate the speed of the traveler between two points and load them into an array
+    // This array is used to create the graph of the traveler's speed throughout his journey
     public double getDistanceSpeedThroughTimeMaxAltitude(ArrayList<Location> trackpoints)
     {
         ArrayList<Integer> speedTime = new ArrayList<>();
@@ -191,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         return total;
     }
 
-    //Calculate the distance between two given Locations by using formulas
+    // Calculate the distance between two given Locations by using formulas
     public double distanceBetweenTwoPoints(double lat1, double lat2, double lon1, double lon2)
     {
         double earthRadius = 3958.75;
@@ -205,11 +203,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         return (int) (distance * meterConversion);
     }
 
-    //Method used to get the current Location of the traveler
-    //Taken from "Android by Example"
+    // Method used to get the current Location of the traveler
+    // Taken from "Android by Example"
     private void addLocationListener() {
 
-        //Ask the permission to use the GPS
+        // Ask the permission to use the GPS
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -228,9 +226,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, new LocationListener() {
             @Override
-            //The app will get the current Location of the traveler every 5 seconds
-            //Each time the app gets a Location, it will add it to an ArrayList and write it in the .gpx file
-            //The app starts getting Location once the journey has begun
+            // The app will get the current Location of the traveler every 5 seconds
+            // Each time the app gets a Location, it will add it to an ArrayList and write it in the .gpx file
+            // The app starts getting Location once the journey has begun
             public void onLocationChanged(Location location) {
                 if(running)
                 {
@@ -240,14 +238,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
 
             @Override
-            //Nothing to do here
+            // Nothing to do here
             public void onStatusChanged(String provider, int status, Bundle extras) {
 
             }
 
             @Override
-            //When the GPS is enabled, this is called
-            //Does the same thing as in onLocationChanged
+            // Call this method When the GPS is enabled
+            // Does the same thing as in onLocationChanged
             public void onProviderEnabled(String provider) {
                 if (provider == LocationManager.GPS_PROVIDER) {
                     if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -274,8 +272,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
 
             @Override
-            //When the GPS is disabled, this is called
-            //It adds a Location with no longitude, latitude, altitude and time
+            // This method is called when the GPS is disabled
+            // It adds a Location with no longitude, latitude, altitude and time
             public void onProviderDisabled(String provider) {
                 if(provider == LocationManager.GPS_PROVIDER)
                 {
@@ -294,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
     }
 
-    //Asks permissions to the user to access the GPS and the external storage
+    // Asks permissions to the user to access the GPS and the external storage
     public void askPermissionsStorageLocation()
     {
         String[] permissions = new String[]
@@ -307,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         ActivityCompat.requestPermissions(this, permissions, answer);
     }
 
-    //Start the pedometer
+    // Start the pedometer
     public void startPedometer()
     {
         recordSteps.setText("Number of Steps:");
@@ -322,15 +320,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-    //End the pedometer
+    // End the pedometer
     public void endPedometer()
     {
         recordSteps.setText("");
         stepCounter.setText("");
     }
 
-    //Called when the phone's sensor has changed
-    //Works in the same vein as onLocationChanged
+    // Called when the phone's sensor has changed
+    // Works in the same vein as onLocationChanged
     @Override
     public void onSensorChanged(SensorEvent event)
     {
@@ -344,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-    //Nothing to do here
+    // Nothing to do here
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 

@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-//This class exists for the sole purpose of creating a .gpx file and writing in it
+// This class exists for the sole purpose of creating a .gpx file and writing in it
 public class GPXHelper extends AppCompatActivity{
 
     Context context;
@@ -50,9 +50,10 @@ public class GPXHelper extends AppCompatActivity{
        this.context = context;
     }
 
-    //Create a new directoy called "GPStracks" in the external directory
-    //if it does not exists to store .gpx files in it
-    //The file is accessible to anyone
+    // Create a new directoy called "GPStracks" in the external directory
+    // If it does not exists to store .gpx files in it
+    // The file is accessible to everyone
+
     public File newDirectory(String directoryName)
     {
         String gpsFolder = directoryName;
@@ -64,7 +65,7 @@ public class GPXHelper extends AppCompatActivity{
         return file;
     }
 
-    //Create a new .gpx file with the appropriate name, header etc.
+    // Create a new .gpx file with the appropriate name, header, and other specifications
     public File newFile(File f, String fileName)
     {
         try {
@@ -85,7 +86,7 @@ public class GPXHelper extends AppCompatActivity{
         }
     }
 
-    //Add a trackpoint to the .gpx file with its latitude, longitude, altitude and time
+    // Add a trackpoint to the .gpx file with its latitude, longitude, altitude and time
     public void writeInFile(File f, Location l)
     {
         try {
@@ -100,7 +101,7 @@ public class GPXHelper extends AppCompatActivity{
         }
     }
 
-    //Close the file by writing the necessary things at the end.
+    // Close the file by writing the necessary elements at the end
     public void closeFile(File f)
     {
         try {
