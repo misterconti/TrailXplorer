@@ -79,6 +79,7 @@ public class GPXHelper extends AppCompatActivity{
             writer.append(name);
             writer.flush();
             writer.close();
+            Toast.makeText(context, ".gpx file saved at " + f.getPath(), Toast.LENGTH_SHORT).show();
             return gpxFile;
         } catch (IOException e) {
             e.printStackTrace();
